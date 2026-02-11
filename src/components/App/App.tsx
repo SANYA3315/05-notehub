@@ -15,20 +15,25 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
+
+  const [previousNotes, setPreviousNotes] = useState<any[]>([]); 
+
   const debouncedSearch = useDebouncedCallback((value: string) => {
     setSearch(value);
     setPage(1);
   }, 500);
 
-
-  const { data } = useQuery<FetchNotesResponse>({
+  const query = useQuery<FetchNotesResponse>({
     queryKey: ["notes", page, search],
     queryFn: () => fetchNotes(page, search),
   });
 
-  // Безпечний доступ до даних
-  const notes = data?.notes ?? [];
-  const totalPages = data?.totalPages ?? 0;
+
+  const notes = query.data?.notes ?? previousNotes; 
+  const totalPages = query.data?.totalPages ?? 1;
+
+
+  if (query.data?.notes) setPreviousNotes(query.data.notes);
 
   return (
     <div className={css.app}>
