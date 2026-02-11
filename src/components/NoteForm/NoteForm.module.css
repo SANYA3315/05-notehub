@@ -1,0 +1,55 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.input:focus {
+  border-color: #4f46e5;
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.error {
+  color: #e11d48;
+  font-size: 12px;
+}
+
+.button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: #4f46e5;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover {
+  background-color: #4338ca;
+}
