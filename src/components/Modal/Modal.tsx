@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import css from "./Modal.module.css";
@@ -13,8 +14,15 @@ export default function Modal({ children, onClose }: ModalProps) {
       if (e.key === "Escape") onClose();
     };
 
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+      document.body.style.overflow = originalOverflow;
+    };
   }, [onClose]);
 
   return createPortal(
@@ -24,10 +32,7 @@ export default function Modal({ children, onClose }: ModalProps) {
       role="dialog"
       aria-modal="true"
     >
-      <div
-        className={css.modal}
-        onClick={e => e.stopPropagation()}
-      >
+      <div className={css.modal} onClick={e => e.stopPropagation()}>
         {children}
       </div>
     </div>,
