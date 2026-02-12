@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDebouncedCallback } from "use-debounce";
-import type { FetchNotesResponse } from "../../services/noteService"; 
+import type { FetchNotesResponse } from "../../services/noteService";
+import type { Note } from "../../types/note";
 import { fetchNotes } from "../../services/noteService";
 import NoteList from "../NoteList/NoteList";
 import SearchBox from "../SearchBox/SearchBox";
@@ -16,7 +17,7 @@ export default function App() {
   const [isOpen, setIsOpen] = useState(false);
 
 
-  const [previousNotes, setPreviousNotes] = useState<any[]>([]); 
+  const [previousNotes, setPreviousNotes] = useState<Note[]>([]);
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
     setSearch(value);
@@ -26,14 +27,17 @@ export default function App() {
   const query = useQuery<FetchNotesResponse>({
     queryKey: ["notes", page, search],
     queryFn: () => fetchNotes(page, search),
+    initialData: () => ({ notes: previousNotes, totalPages: 1 }),
   });
 
 
-  const notes = query.data?.notes ?? previousNotes; 
-  const totalPages = query.data?.totalPages ?? 1;
+  const notes: Note[] = query.data?.notes ?? previousNotes;
+  const totalPages: number = query.data?.totalPages ?? 1;
 
 
-  if (query.data?.notes) setPreviousNotes(query.data.notes);
+  if (query.data?.notes && query.data.notes !== previousNotes) {
+    setPreviousNotes(query.data.notes);
+  }
 
   return (
     <div className={css.app}>
